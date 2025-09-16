@@ -1,0 +1,189 @@
+init python:
+    def potion_craft_logic():
+        global is_potion_crafted, is_lilly_potion_crafted
+        is_crafted = False  # Флаг для отслеживания успешного создания зелья
+        for i in unlock_recipes:
+            tmp_recipe = {frozenset(d.items()) for d in i['ing_list']}
+            tmp_used = {frozenset(d.items()) for d in used_ingredient_list}    
+            if tmp_recipe == tmp_used:
+                renpy.notify(f"Вы сварили: {i['name']}!")
+                if i['potion_id'] == 6:
+                    is_lilly_potion_crafted = True
+                is_crafted = True
+                is_potion_crafted = True
+                add_item(i['potion_id'], 1)
+                return
+        if not is_crafted:
+            for i in recipes:
+                tmp_recipe = {frozenset(d.items()) for d in i['ing_list']}
+                tmp_used = {frozenset(d.items()) for d in used_ingredient_list}    
+                if tmp_recipe == tmp_used:
+                    random_number = randint(0, 100)
+                    if random_number <= 20:  # 20% шанс на успех
+                        renpy.notify(f"Вы сварили: {i['name']}!")
+                        if i['potion_id'] == 6:
+                            is_lilly_potion_crafted = True
+                        is_crafted = True
+                        is_potion_crafted = True
+                        add_item(i['potion_id'], 1)
+                        return
+                    else:
+                        renpy.notify("Вы не сварили зелье. Попробуйте использовать другие ингредиенты или получить рецепт.")
+                        return
+                    break
+        else:
+            renpy.notify("Вы не сварили зелье. Попробуйте использовать другие ингредиенты или получить рецепт.")
+            return
+
+default unlock_recipes = []
+# Список рецептов зелий
+default recipes = [
+    # Зелье бреда ID 3 
+    {
+        "name": itemList[3]['name'],
+        "description": itemList[3]['description'],
+        "ing_list": itemList[4]['ing_list'],
+        'potion_id': 3,  # ID зелья, которое будет создано
+    },
+    # Зелье смеха ID 6
+    {
+        "name": itemList[6]['name'],
+        "description": itemList[6]['description'],
+        "ing_list": itemList[7]['ing_list'],
+        'potion_id': 6,  # ID зелья, которое будет создано
+    },
+    # Зелье проявления 8
+    {
+        "name": itemList[8]['name'],
+        "description": itemList[8]['description'],
+        "ing_list": itemList[9]['ing_list'],
+        'potion_id': 8,  # ID зелья, которое будет создано
+    },
+]
+
+# Использование ингредиента
+label use_ingredient:
+    # Проверяем есть ли что выбирать
+    python:
+        available_ingredients = [
+            item for item in inventory 
+            if item['type'] == 'ingredient' and item['count'] > 0
+        ]
+        
+    if not available_ingredients:
+        return  # Просто выходим, если нечего выбирать
+    
+    call screen inventory_screen(context="craft", filter='ingredients')
+    $ selected = _return
+
+    if selected == True:
+        jump basement
+    
+    # Дополнительная проверка на случай параллельных изменений
+    if selected['count'] <= 0:
+        "Этот ингредиент уже закончился!"
+        return
+    
+    # Уменьшаем количество в инвентаре
+    python:
+        for item in inventory:
+            if item['type'] == 'ingredient':
+                if item['ing_id'] == selected['ing_id']:
+                    item['count'] -= 1
+                    if item['count'] <= 0:
+                        inventory.remove(item)
+                    break
+    
+    # Добавляем в список использованных
+    python:
+        found = False
+        for used in used_ingredient_list:
+            if used['ing_id'] == selected['ing_id']:
+                used['count'] += 1
+                found = True
+                break
+                
+        if not found:
+            new_used = {
+                "count": 1,
+                "ing_id": selected['ing_id'],  # Добавляем идентификатор ингредиента
+            }
+            used_ingredient_list.append(new_used)
+    
+    "Вы использовали [selected['name']]!"
+    $ ingredient_count += 1
+    return
+
+# Метка для создания зелья
+label make_potion:
+
+    python:
+        potion_craft_logic()
+    
+    # Сброс параметров варки
+    $ ingredient_count = 0
+    $ used_ingredient_list = []
+    return
+
+# Меню варки зелий
+label brew_menu:
+    show basement potion with fade
+    
+    # Проверяем остались ли ингредиенты перед каждым выбором
+    python:
+        available_ingredients = [
+            item for item in inventory 
+            if item['type'] == 'ingredient' and item['count'] > 0
+        ]
+    
+    if not available_ingredients:
+        "Ингредиенты закончились!"
+        if ingredient_count > 0:
+            call make_potion
+        else:
+            "Вы не использовали ни одного ингредиента."
+        return
+    
+    call use_ingredient
+    
+    # Проверяем условия завершения варки
+    if ingredient_count >= 3:
+        call make_potion
+        return
+    
+    jump brew_menu
+
+# Метка для подвала
+label basement:
+    show basement basic with fade
+    $ ingredient_count = 0
+    $ used_ingredient_list = []  # Сбрасываем список при каждом входе
+    
+    call show_gui
+
+    # Проверяем есть ли вообще ингредиенты
+    python:
+        has_ingredients = any(
+            item['type'] == 'ingredient' and item['count'] > 0 
+            for item in inventory
+        )
+    
+    menu:
+        "Посмотреть рецепты":
+            call screen inventory_screen(filter="recipe")
+            jump basement
+            
+        "Варить зелье" if has_ingredients:
+            call brew_menu
+            jump basement
+            
+        "Варить зелье" if not has_ingredients:
+            "У вас нет ингредиентов для варки!"
+            jump basement
+            
+        "Вернуться домой":
+            call hide_gui
+            hide basement basic with fade
+            call hide_gui
+            show black
+            call transition("home")

@@ -1,0 +1,476 @@
+﻿init -1:
+    transform default_transform:
+        xzoom 0.385
+        yzoom 0.385
+        yoffset 25
+# Начальная заставка-интро
+label intro:
+    show 0-1
+    with Dissolve(.3)
+    pause
+    hide 0-1
+
+    show 0-2
+    with Dissolve(.3)
+    pause
+    hide 0-2
+
+    show 0-3
+    with Dissolve(.3)
+    pause
+    hide 0-3
+
+    show 0-4
+    with Dissolve(.3)
+    pause
+    hide 0-4
+
+    show 0-5
+    with Dissolve(.3)
+    s "Наконец-то, спустя столько времени, я могу уехать отсюда."
+    with Dissolve(.3)
+    hide 0-5
+
+    show 0-6
+    with Dissolve(.3)
+    s "Я могу спокойно и без конкуренции заняться зельеварением."
+    with Dissolve(.3)
+    hide 0-6
+    window hide  
+
+    show 0-7
+    with Dissolve(.3)
+    pause
+    hide 0-7
+
+    show 0-8
+    with Dissolve(.3)
+    s "Уж где-где, а в маленьком городке точно не будет..."
+    with Dissolve(.3)
+    hide 0-8
+
+    show 0-9
+    with Dissolve(.3)
+    s "...никакого дипломированного зельевара!"
+    with Dissolve(.3)
+    hide 0-9
+    window hide
+
+    show 0-10
+    with Dissolve(.3)
+    pause
+    hide 0-10
+
+    show 0-11
+    with Dissolve(.3)
+    s "Я отучился на профессионального зельевара."
+    with Dissolve(.3)
+    hide 0-11
+
+    show 0-10
+    with Dissolve(.3)
+    s "И у меня были очень хорошие оценки..."
+    with Dissolve(.3)
+    hide 0-10
+
+    show bs
+    with Dissolve(.3)
+    s "Если бы не эти дурацкие правила..."
+    with Dissolve(.3)
+    s "Да сдалась мне эта лаборатория, я и в котле всё сварить смогу! Выйдет даже лучше!"
+    with Dissolve(.3)
+
+    hide bs
+    window hide
+
+    show 0-10
+    with Dissolve(.3)
+    pause
+    hide 0-10
+
+    show 0-11
+    with Dissolve(.3)
+    s "Они не принимают ведьмовские способы, хотя ведьмы и придумали зелья как таковые..."
+    with Dissolve(.3)
+    hide 0-11
+    window hide
+
+    show bs
+    with Dissolve(.3)
+    pause
+    hide bs
+
+    show 0-12
+    with Dissolve(.3)
+    pause
+    hide 0-12
+
+    show 0-13
+    with Dissolve(.3)
+    pause
+    u "Эй, парень?"
+    hide 0-13
+
+    show 0-15
+    with Dissolve(.3)
+    u "Добро пожаловать в Лесной Перекрёсток."
+    with Dissolve(.3)
+    hide 0-15
+
+    show 0-14
+    with Dissolve(.3)
+    u "Ты Кристофер, как я полагаю?"
+    with Dissolve(.3)
+    hide 0-14
+
+    show 0-16
+    with Dissolve(.3)
+    hero "Приятно познакомится."
+    with Dissolve(.3)
+    hide 0-16
+
+    show 0-17
+    with Dissolve(.3)
+    u "Я Льюис, действительно приятно."
+    with Dissolve(.3)
+    hide 0-17
+
+    show 0-18
+    with Dissolve(.3)
+    l "Пойдём, я покажу тебе твой дом."
+    with Dissolve(.3)
+    hide 0-18
+    window hide
+
+    show bs
+    with Dissolve(.3)
+    pause
+    hide bs
+
+    show 0-19
+    with Dissolve(.3)
+    pause
+    hide 0-19
+
+    show 0-20
+    with Dissolve(.3)
+    l "Не сочти за грубым, но зачем такому молодому парню приезжать из мегаполиса в такой крошечный городок, как наш перекрёсток?"
+    with Dissolve(.3)
+    hide 0-20
+
+    show 0-21
+    with Dissolve(.3)
+    pause
+    hide 0-21
+
+    show 0-20
+    with Dissolve(.3)
+    pause
+    hide 0-20
+
+    show 0-21
+    with Dissolve(.3)
+    hero "Скажем так, в городе слишком много народу."
+    hero "Я лучше пригожусь здесь."
+    hide 0-21
+
+    show 0-22
+    with Dissolve(.3)
+    l "Я думал ты начнёшь загонять про спокойствие и тишину."
+    with Dissolve(.3)
+    hide 0-22
+
+    show 0-23
+    with Dissolve(.3)
+    hero "Я сильно похож на сентиментального человека?"
+    with Dissolve(.3)
+    hide 0-23
+
+    show 0-24
+    with Dissolve(.3)
+    l "Ни капли."
+    with Dissolve(.3)
+    pause
+    hide 0-24
+
+    show 0-25
+    with Dissolve(.3)
+    pause
+    hide 0-25
+
+    show 0-26
+    with Dissolve(.3)
+    pause
+    hide 0-26
+
+    show bs
+    with Dissolve(.3)
+    pause
+    hide bs
+
+    show 0-27
+    with Dissolve(.3)
+    pause
+    hide 0-27
+
+    show 0-28
+    with Dissolve(.3)
+    pause
+    hide 0-28
+
+    show 0-29
+    with Dissolve(.3)
+    l "Это твой дом."
+    with Dissolve(.3)
+    hide 0-29
+
+    show 0-30
+    with Dissolve(.3)
+    l "Как я тебя предупреждал, здесь иногда происходит какая-то неведомая чертовщина."
+    with Dissolve(.3)
+    hide 0-30
+
+    show 0-31
+    with Dissolve(.3)
+    l "Ты же не передумал?"
+    with Dissolve(.3)
+    hide 0-31
+
+    show 0-32
+    with Dissolve(.3)
+    hero "Нет, не передумал."
+    with Dissolve(.3)
+    hide 0-32
+
+    show 0-33
+    with Dissolve(.3)
+    hero "Чтобы бы тут не происходило, этому есть объяснение."
+    with Dissolve(.3)
+    hide 0-33
+
+    show 0-34
+    with Dissolve(.3)
+    hero "Может я и разгадаю что тут да как."
+    with Dissolve(.3)
+    hide 0-34
+
+    show 0-35
+    with Dissolve(.3)
+    l "Смелое заявление."
+    with Dissolve(.3)
+    hide 0-35
+
+    show 0-36
+    with Dissolve(.3)
+    l "Но ты такой не первый."
+    with Dissolve(.3)
+    hide 0-36
+
+    show 0-37
+    with Dissolve(.3)
+    l "А давай пари?"
+    with Dissolve(.3)
+    hide 0-37
+
+    show 0-37
+    with Dissolve(.3)
+    l "Проживёшь здесь месяц, и я выставлю этот дом на продажу."
+    with Dissolve(.3)
+    hide 0-37
+
+    show 0-38-0
+    with Dissolve(.3)
+    hero "И какова будет цена?"
+    with Dissolve(.3)
+    hide 0-38-0
+
+    show 0-39
+    with Dissolve(.3)
+    l "Если честно не знаю."
+    with Dissolve(.3)
+    hide 0-39
+
+    show 0-40
+    with Dissolve(.3)
+    l "Нужно сверится с документами."
+    with Dissolve(.3)
+    hide 0-40
+
+    show 0-41
+    with Dissolve(.3)
+    l "В любом случае, это будет единственный дом на продаже, у тебя и выбора то не будет среди вариантов."
+    with Dissolve(.3)
+    hide 0-41
+
+    show 0-42
+    with Dissolve(.3)
+    hero "И то верно."
+    with Dissolve(.3)
+    hide 0-42
+
+    show 0-43
+    with Dissolve(.3)
+    s "Если этот дом мне подойдёт, я выкуплю его сразу же."
+    s "Денег у меня не много, но если мой план и задумка удастся, то с деньгами не должно быть сильных проблем!"
+    with Dissolve(.3)
+    hide 0-43
+
+    show 0-44
+    with Dissolve(.3)
+    l "В любом случае, уже поздно."
+    with Dissolve(.3)
+    hide 0-44
+
+    show 0-45
+    with Dissolve(.3)
+    l "Завтра с утра сможешь прогуляться по деревне, познакомься с жителями, познавай окрестности."
+    with Dissolve(.3)
+    hide 0-45
+
+    show 0-46
+    with Dissolve(.3)
+    l "Дело за тобой, увидимся!"
+    with Dissolve(.3)
+    hide 0-46
+
+    show 0-47
+    with Dissolve(.3)
+    pause
+    hide 0-47
+
+    show 0-48
+    with Dissolve(.3)
+    pause
+    hide 0-48
+
+    show 0-49
+    with Dissolve(.3)
+    pause
+    hide 0-49
+
+    show 0-50
+    with Dissolve(.3)
+    s "А теперь, самое главное... Подвал!"
+    with Dissolve(.3)
+    hide 0-50
+
+    show bs
+    with Dissolve(.3)
+    pause
+    hide bs
+
+    show 0-51
+    with Dissolve(.3)
+    pause
+    hide 0-51
+
+    show 0-52
+    with Dissolve(.3)
+    pause
+    hide 0-52
+
+    show 0-53
+    with Dissolve(.3)
+    pause
+    hide 0-53
+
+    show 0-54
+    with Dissolve(.3)
+    pause
+    hide 0-54
+
+    show 0-55
+    with Dissolve(.3)
+    pause
+    hide 0-55
+
+    show 0-56
+    with Dissolve(.3)
+    pause
+    hide 0-56
+
+    show 0-57
+    with Dissolve(.3)
+    pause
+    hide 0-57
+
+    show 0-58
+    with Dissolve(.3)
+    hero "О да.."
+    with Dissolve(.3)
+    hide 0-58
+
+    show 0-59
+    with Dissolve(.3)
+    hero "С этим можно работать!"
+    with Dissolve(.3)
+    hide 0-59
+
+    show bs
+    with Dissolve(.3)
+    pause
+    hide bs
+    return
+# В магазине
+label open_shop:
+    call screen inventory_screen(context="shop")
+    return
+
+label hide_gui:
+    hide screen show_inventory_button
+    hide screen show_quest_button
+    return
+
+label show_gui:
+    show screen show_inventory_button()
+    show screen show_quest_button()
+    return
+
+label start:
+
+    # Эта метка вызывается при запуске игры.
+    scene black
+    
+    call intro
+
+    jump home
+
+    # return
+
+screen map():
+    add "gui/map.png" at fade_in_out:
+        fit "cover"
+
+    textbutton "Дом":
+        pos (1100, 900)
+        text_color "FFFFFF"
+        text_hover_color "FFD000"
+        action [Function(renpy.call, "transition", "home")]
+    
+    textbutton "Лес":
+        pos (250, 450)
+        text_color "FFFFFF"
+        text_hover_color "FFD000"
+        action [Function(renpy.call, "transition", "forest_handler")]
+
+    if is_lilly_know == True:
+        if is_lilly_meet == False:
+            textbutton "Травник":
+                pos (1200, 500)
+                text_color "FFFFFF"
+                text_hover_color "FFD000"
+                action [Jump("lilly_home")]
+        else:
+            textbutton 'Лилли':
+                pos (1200, 500)
+                text_color "FFFFFF"
+                text_hover_color "FFD000"
+                action [Jump("lilly_home")]
+
+transform fade_in_out:
+    alpha 0.0
+    on show:
+        linear 0.5 alpha 1.0
+    on hide:
+        linear 0.5 alpha 0.0
+
