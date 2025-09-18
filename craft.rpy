@@ -147,6 +147,8 @@ screen craft_screen():
         (60, 305)
     ]
 
+    $ is_slots_full = len(cauldron_load) >= slot_count
+
     $ tmp_list = []
     for i in inventory:
         if i["type"] == "ingredient":
@@ -160,9 +162,15 @@ screen craft_screen():
             imagebutton:
                 idle im.Scale(tmp_list[count]["icon"], 75, 75)
                 hover im.Scale(tmp_list[count]["icon_hover"], 75, 75)
-                action [
-                    Function(insert_to_load, tmp_list[count])
-                    ]
+                if is_slots_full:
+                    action NullAction()
+                else:
+                    action [
+                        Show('blocker'),
+                        Show('item_transfer_animation', None, tmp_list[count], (1133 + (j * 100), 172 + (i * 95)), load_coords[len(cauldron_load)], _tag="item_transfer_animation_%s"%tmp_list[count]['id'], cb=insert_to_load, arg=tmp_list[count]),
+                        # Function(renpy.pause, 1.0),
+                        # Function(insert_to_load, tmp_list[count])
+                        ]
                 hovered Function(show_tooltip_for_item, tmp_list[count]["name"], tmp_list[count]["description"])
                 unhovered Function(renpy.hide_screen, "tooltip_screen")
                 pos (1133 + (j * 100), 172 + (i * 95))
@@ -183,7 +191,12 @@ screen craft_screen():
             imagebutton:
                 idle im.Scale(cauldron_load[i]["icon"], 100, 100)
                 hover im.Scale(cauldron_load[i]["icon_hover"], 100, 100)
-                action Function(remove_from_load, cauldron_load[i])
+                action [
+                    Show('blocker'),
+                    Function(remove_from_load, cauldron_load[i]),
+                    Show('item_disapear_animation', None, cauldron_load[i], load_coords[i], _tag="item_disapear_animation_%s"%cauldron_load[i]['id']),
+                    # Function(remove_from_load, cauldron_load[i])
+                    ]
                 pos load_coords[i]
                 xysize (100, 100)
 
