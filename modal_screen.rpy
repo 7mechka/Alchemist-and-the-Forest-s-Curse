@@ -144,7 +144,11 @@ screen tooltip_screen(name, desc, position=(0,0)):
     frame at tooltip_style:
         style_prefix "tooltip"
         xysize (250, None)
-        pos position
+        if position[0] - 250 <= 0:
+            xpos position[0] + 250
+            ypos position[1]
+        else:
+            pos position
         vbox:
             spacing 5
             text name style "tooltip_name"

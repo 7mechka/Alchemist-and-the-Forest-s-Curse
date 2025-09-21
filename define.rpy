@@ -357,7 +357,7 @@ define itemList = [
         "price": 50,
         'id': 15
     },
-    # Ржаволист ID 16
+    # Туманник ID 16
     {
         "name": ingredientList[9]['name'],
         "description": ingredientList[9]['description'],
