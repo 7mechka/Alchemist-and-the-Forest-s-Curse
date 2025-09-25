@@ -123,7 +123,7 @@ transform notif_anim:
         linear 0.2 alpha 0.0
 
 init python:
-    def show_tooltip_for_item(name, desc):
+    def show_tooltip_for_item(name, desc, count=1):
         # Берём текущую позицию мыши и смещаем, чтобы тултип не ёлозил под курсором
         x, y = renpy.get_mouse_pos()
         x += 16
@@ -134,12 +134,12 @@ init python:
         # renpy.hide_screen("tooltip_screen")
 
         # Показываем новый экран с аргументами
-        renpy.show_screen("tooltip_screen", name, desc, (x, y))
+        renpy.show_screen("tooltip_screen", name, desc, count, (x, y))
 
 
 # Экран подсказки
 # Экран тултипа
-screen tooltip_screen(name, desc, position=(0,0)):
+screen tooltip_screen(name, desc, count, position=(0,0)):
     zorder 400
     frame at tooltip_style:
         style_prefix "tooltip"
@@ -151,7 +151,7 @@ screen tooltip_screen(name, desc, position=(0,0)):
             pos position
         vbox:
             spacing 5
-            text name style "tooltip_name"
+            text f"{name} {count}x" style "tooltip_name"
             text desc style "tooltip_desc"
 
 # Стили для тултипа
@@ -160,6 +160,7 @@ style tooltip_frame is frame:
     padding (10, 5)
 
 style tooltip_name is text:
+    font gui.name_text_font
     size 22
     color "#ffcc66"     # мягкий жёлтый (можно поменять)
     bold True

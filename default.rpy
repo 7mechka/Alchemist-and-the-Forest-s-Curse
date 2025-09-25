@@ -14,4 +14,6 @@ default day = 1
 default lilly_shop = [
     get_item_by_id(0, itemList, 5),
     get_item_by_id(4, itemList, 1),
+    get_item_by_id(1, itemList, 4),
+    get_item_by_id(3, itemList, 1),
 ]

@@ -273,9 +273,9 @@ screen show_quest_button():
     imagebutton:
         xysize (100, 100)
         yalign 0.05
-        xalign 0.85
-        idle 'gui/quest_gui_button_idle.png'
-        hover 'gui/quest_gui_button_hover.png'
+        xalign 0.88
+        idle 'gui/inventory/quest_button_idle.png'
+        hover 'gui/inventory/quest_button_active.png'
         action Show("quest_screen")
 
 label open_quest:

@@ -16,7 +16,9 @@ label lilly_home:
             l "Разговор"
             jump lilly_home
         "Магазин":
-            call screen inventory_screen(context='shop', source=lilly_shop, shop="buy")
+            show lilly_sprite smile clothed_1 at shop_left
+            # l "Конечно, заходи!"
+            call screen shop_screen(lilly_shop, 'Лила')
             jump lilly_home
         "Отдать зелье смеха" if is_lilly_potion_crafted and not is_s0_complete:
             call lilly_side_potion from _call_lilly_side_potion
@@ -498,7 +500,7 @@ label lilly_meet:
             if i['quest_id'] == 'm2':
                 active_quest['main'].remove(i)
                 active_quest['side'].append(get_quest_by_id('s0'))
-                add_item(7, 1)
+                add_item_to_inventory(inventory, 7, 1)
                 update_unlock_recipes()
                 break
     

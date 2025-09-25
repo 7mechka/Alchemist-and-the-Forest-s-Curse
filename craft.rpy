@@ -68,7 +68,7 @@ init python:
                         is_lilly_potion_crafted = True
                     is_crafted = True
                     is_potion_crafted = True
-                    add_item(i['potion_id'], 1)
+                    add_item_to_inventory(inventory, i['potion_id'], 1)
                     cauldron_load = []
                     cauldron_recipe_load = []
                     return
@@ -84,7 +84,7 @@ init python:
                             is_lilly_potion_crafted = True
                         is_crafted = True
                         is_potion_crafted = True
-                        add_item(i['potion_id'], 1)
+                        add_item_to_inventory(inventory, i['potion_id'], 1)
                         cauldron_load = []
                         cauldron_recipe_load = []
                         return
