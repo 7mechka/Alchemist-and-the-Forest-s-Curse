@@ -3,6 +3,7 @@
         xzoom 0.385
         yzoom 0.385
         yoffset 25
+
 # Начальная заставка-интро
 label intro:
     show 0-1

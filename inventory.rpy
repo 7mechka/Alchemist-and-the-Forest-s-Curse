@@ -9,7 +9,6 @@ init python:
                 returned_item['count'] = count
                 return returned_item
 
-
     def calculate_sell_price(buy_price):
         # Рассчитываем половину цены
         half_price = buy_price // 2
@@ -80,13 +79,22 @@ init python:
 
 default is_inventory_open = False
 
+image inventory_button_hover = "gui/inventory/inventory_button_active.png"
+image inventory_button_idle = "gui/inventory/inventory_button_idle.png"
+
 screen show_inventory_button():
-    imagebutton:
+    button:
         xysize (95, 93)
         yalign 0.05
         xalign 0.945
-        idle 'gui/inventory/inventory_button_idle.png'
-        hover 'gui/inventory/inventory_button_active.png'
+
+        style "empty"
+
+        add "gui/inventory/inventory_button_idle.png"
+
+        hovered [Function(renpy.show, "inventory_button_hover", at_list=[inventory_button_fade_transition], layer='screens')]
+        unhovered [Function(renpy.hide, "inventory_button_hover", layer='screens')]
+
         if is_inventory_open:
             action [SetScreenVariable('is_inventory_open', False), Hide("new_inventory_screen"), Hide("choice_filter")]
         else:
@@ -97,8 +105,8 @@ label open_inventory:
     call screen new_inventory_screen()
     return
 
-
 default is_choice_active = False
+
 screen new_inventory_screen(filter='ingredients'):
     zorder 200
     modal False
@@ -171,7 +179,6 @@ screen new_inventory_screen(filter='ingredients'):
             text str(money) size 22 xpos 10 color "FFD000" font gui.name_text_font
             at item_transform
     
-
 transform inventory_open:
     xanchor 0.9999
     zoom 0
@@ -217,3 +224,13 @@ transform item_transform:
 
 style common_text is text:
     font "Montserrat-Regular.ttf"
+    
+transform inventory_button_fade_transition:
+    xysize (95, 93)
+    yalign 0.05
+    xalign 0.945
+    on show:
+        alpha 0.0
+        linear 0.1 alpha 1.0
+    on hide:
+        linear 0.1 alpha 0.0

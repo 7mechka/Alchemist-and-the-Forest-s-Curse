@@ -214,25 +214,10 @@ label basement:
     $ used_ingredient_list = []  # Сбрасываем список при каждом входе
     
     call show_gui
-
-    # Проверяем есть ли вообще ингредиенты
-    python:
-        has_ingredients = any(
-            item['type'] == 'ingredient' and item['count'] > 0 
-            for item in inventory
-        )
     
-    menu:
-        "Посмотреть рецепты":
-            call screen inventory_screen(filter="recipe")
-            jump basement
-            
+    menu:    
         "Варить зелье" if has_ingredients:
             call screen craft_screen
-            jump basement
-            
-        "Варить зелье" if not has_ingredients:
-            "У вас нет ингредиентов для варки!"
             jump basement
             
         "Вернуться домой":

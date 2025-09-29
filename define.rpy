@@ -1,5 +1,7 @@
 
 init python:
+    config.layers.append('not_hide')
+
     def start_transition(target):
         renpy.call("transition", target)
 

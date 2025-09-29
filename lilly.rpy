@@ -1,13 +1,13 @@
 label lilly_home:
-    call hide_gui from _call_hide_gui_11
+    call hide_gui
 
     if not is_lilly_meet:
-        call lilly_meet from _call_lilly_meet
+        call lilly_meet
         call screen map()
 
-    scene lilly home test with dissolve
+    scene lilly home test with fade
 
-    show lilly_sprite pose2 smile clothed at center
+    show screen lila_sprite(pos=0, face=0)
 
     l "Привет, чем могу помочь?"
 
@@ -16,62 +16,48 @@ label lilly_home:
             l "Разговор"
             jump lilly_home
         "Магазин":
-            show lilly_sprite smile clothed_1 at shop_left
+            show screen lila_sprite(pos=0, face=0, x_pos=-0.2)
             # l "Конечно, заходи!"
             call screen shop_screen(lilly_shop, 'Лила')
             jump lilly_home
         "Отдать зелье смеха" if is_lilly_potion_crafted and not is_s0_complete:
-            call lilly_side_potion from _call_lilly_side_potion
-            $ is_s0_complete = True
+            call lilly_side_potion
+            # $ is_s0_complete = True
 
         "Уйти":
             l "Всего хорошего!"
-            call hide_gui from _call_hide_gui_12
+            hide screen lila_sprite
+            call hide_gui
             scene black with fade
             hide lilly home test with fade
             call screen map()
             return
 
-define lilly_face_dict = {
-    1: 'smile',
-    2: 'surprise',
-    3: 'shy',
-    4: 'angry',
-    5: 'happy',
-    6: 'default',
-}
+define lila_face_list = [
+    'lilly face smile', # 0
+    'lilly face surprise', # 1
+    'lilly face shy', # 2
+    'lilly face angry', # 3
+    'lilly face happy', # 4
+    'lilly face default', # 5
+]
 
-layeredimage lilly_sprite:
-    group body:
-        attribute clothed_1 default:
-            "characters/lilly/lilly clothed pose1.png"
-        attribute clothed_2:
-            "characters/lilly/lilly clothed pose2.png"
-        attribute naked_1:
-            "characters/lilly/lilly naked pose1.png"
-        attribute naked_2:
-            "characters/lilly/lilly naked pose2.png"
+define lila_pose_list = [
+    'lilly clothed pose1',
+    'lilly clothed pose2',
+    'lilly naked pose1',
+    'lilly naked pose2',
+]
 
-    group face:
-        attribute default default:
-            "characters/lilly/lilly face default.png"
-        attribute smile:
-            "characters/lilly/lilly face smile.png"
-        attribute surprise:
-            "characters/lilly/lilly face surprise.png"
-        attribute shy:
-            "characters/lilly/lilly face shy.png"
-        attribute angry:
-            "characters/lilly/lilly face angry.png"
-        attribute happy:
-            "characters/lilly/lilly face happy.png"
-    at default_transform
+screen lila_sprite(face=0, pos=0, x_pos = 0.5):
+    add 'characters/lilly/'+lila_pose_list[pos]+".png" at default_transform xalign x_pos
+    add 'characters/lilly/'+lila_face_list[face]+".png" at default_transform xalign x_pos
 
 label lilly_meet:
 
-    call hide_gui from _call_hide_gui_13
+    call hide_gui
 
-    scene forest 1 with fade
+    scene forest 1 with dissolve
 
     "Подойдя к дому ты решил аккуратно постучать в дверь."
 
@@ -89,25 +75,33 @@ label lilly_meet:
 
     "Вскоре дверь открыватся и на пороге появляется девушка с рыжыми волосами, в лёгком платье."
 
-    show lilly_sprite angry clothed_2 at center
+    # show lilly_sprite angry clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=3)
 
     l "Ну почему ты так не вовремя!"
 
     "Девушка сверлит тебя сердитым взглядом, но не долго."
 
-    show lilly_sprite default clothed_2 at center
+    show screen lila_sprite(pos=1, face=5)
+
+    # show lilly_sprite default clothed_2 at center
 
     "Она выглядит немного сердитой, но вскоре её лицо меняется."
 
     l "Ты же..."
 
-    show lilly_sprite surprise clothed_1 at center
+    show screen lila_sprite(pos=0, face=1)
+
+    # show lilly_sprite surprise clothed_1 at center
 
     "Девушка мгновенно меняется в лице, осознав что происходит."
 
     l "Извините, я просто убиралась на больших полках, и вас стук испугал меня, я чуть не упала."
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     l "Вам что-то нужно?"
 
@@ -119,7 +113,9 @@ label lilly_meet:
 
     l "Меня зовут Лила, занимаюсь всякими травами, на продажу и для себя..."
 
-    show lilly_sprite default clothed_1 at center
+    # show lilly_sprite default clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=5)
 
     "Девушка резко прервалась и нахмурилась."
 
@@ -137,13 +133,17 @@ label lilly_meet:
 
     "Ты решаешь говорить к ней менее формально, ведь она выглядит довольно мило и сама так делает."
 
-    show lilly_sprite smile clothed_2 at center
+    # show lilly_sprite smile clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=0)
 
     l "У растений есть запах, понимаешь?"
 
     l "А у тебя он слишком уж мне знакомый..."
 
-    show lilly_sprite angry clothed_2 at center
+    # show lilly_sprite angry clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=3)
 
     l "Это ты в последние дни травы по лесу собираешь?"
 
@@ -157,15 +157,21 @@ label lilly_meet:
 
     hero "Ну да, немного взял попробовать поварить. Если нельзя было я заплачу!"
 
-    show lilly_sprite default clothed_1 at center
+    # show lilly_sprite default clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=5)
 
     "Девушка немного смотрит на тебя, но как-то странно."
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     "Очевидно же, она улыбку сдерживает!"
 
-    show lilly_sprite happy clothed_1 at center
+    # show lilly_sprite happy clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=4)
 
     "Поняв что её разкусили Лила начинает смеяться."
 
@@ -179,51 +185,67 @@ label lilly_meet:
 
     "Что происходит?"
 
-    show lilly_sprite smile clothed_2 at center
+    # show lilly_sprite smile clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=0)
 
     "Через несколько секунд Лила успокаивается и продолжает."
 
     l "Просто шутка, можешь брать из леса столько, сколько нужно, я только рада буду."
 
-    show lilly_sprite happy clothed_2 at center
+    # show lilly_sprite happy clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=4)
 
     l "У меня есть свои секретные места, не парься!"
 
     "Лила выглядит довольной, но переводит тему."
 
-    show lilly_sprite default clothed_2 at center
+    # show lilly_sprite default clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=5)
 
     l "Вообще хорошо что у нас теперь алхимик есть, а то на одной Терезе мы далеко не уедем..."
 
     "Ты немного не понимаешь, кто такая Тереза, но не спрашиваешь."
 
-    show lilly_sprite surprise clothed_1 at center
+    # show lilly_sprite surprise clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=1)
     
     l "Кстати пошли в дом!"
 
     "Её лицо резко меняется."
 
-    show lilly_sprite angry clothed_1 at center
+    # show lilly_sprite angry clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=3)
 
     l "Что мы как идиоты у порога стоим!"
 
     "Ты немного нахмурился, обдумывая её приглашение."
 
-    show lilly_sprite default clothed_1 at center
+    # show lilly_sprite default clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=5)
 
     hero "Да нет, спасибо, я просто пришёл узнать что и кто где живёт..."
 
     "Не успел ты договорить, как Лила резко перебивает."
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     l 'Вот и поговорим внутри!'
 
-    show lilly_sprite happy clothed_1 at center
+    # show lilly_sprite happy clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=4)
 
     l "Я конечно не знаю откуда ты, но я тебе заварю свой коронный чай, тебе точно понравится!"
 
-    hide lilly_sprite
+    hide screen lila_sprite
 
     "Ты не успеваешь возразить, как Лила хватает тебя за руку и тащит в дом."
 
@@ -247,7 +269,9 @@ label lilly_meet:
 
     "Лила усаживает тебя за стол и сама садится напротив."
 
-    show lilly_sprite smile clothed_2 at center
+    # show lilly_sprite smile clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=0)
 
     l "А вообще, расскажи про свою алхимию."
 
@@ -263,7 +287,9 @@ label lilly_meet:
 
     "Немного строгим голосом начал ты."
 
-    show lilly_sprite surprise clothed_2 at center
+    # show lilly_sprite surprise clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=1)
 
     hero "Алхимик может варить зелье, снадобья, трансмутировать материалы и вещи, синтезировать вещества, улучшать и мутировать живые организмы и ещё невесть что."
 
@@ -271,35 +297,47 @@ label lilly_meet:
 
     "Видно Лилу подобное объяснение удивило, и ты решаешь продолжить."
 
-    show lilly_sprite default clothed_1 at center
+    # show lilly_sprite default clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=5)
 
     hero "Конкретно я - зельевар."
 
     hero "Есть Алхимия зелий, а есть зельеварение, хотя оба варят зелья, подход совершенно разный."
 
-    show lilly_sprite surprise clothed_1 at center
+    # show lilly_sprite surprise clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=1)
 
     hero "Алхимик зелий использует всякие микроскопы, печи, центрифуги, вакуумные камеры и прочее, он обмазанный аппаратурой, действует строго по рецептуре, ни шага влево или вправо."
 
     hero "Для него растение это просто куча алхимических эффектов в одном месте, и он оперирует ими."
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     hero "Зельевар - это древняя профессия, которая пошла от ведьм."
 
     hero "Ведьмы всегда были отшельниками, поэтому ну никак не могли бы получить хоть какое то оборудование."
 
-    show lilly_sprite surprise clothed_1 at center
+    # show lilly_sprite surprise clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=1)
 
     hero "Тем более что они были постоянно в бегах, ореол обитания постоянно менялся, следовательно и ингредиенты которые они используют тоже."
 
-    show lilly_sprite default clothed_1 at center
+    # show lilly_sprite default clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=5)
 
     hero "Единственное что было неизменно это их котёл, который они всегда носили з собой."
 
     hero "Зельеварам нужен только котёл, время и достаточное количество ингредиентов, и они смогут процветать где угодно."
 
-    show lilly_sprite smile clothed_2 at center
+    # show lilly_sprite smile clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=0)
 
     hero "Алхимик зелий не сможет самостоятельно существовать вдали от своей лаборатории."
 
@@ -307,29 +345,39 @@ label lilly_meet:
 
     hero "Это не значить что Алхимики зелий плохие, даже наоборот."
 
-    show lilly_sprite surprise clothed_2 at center
+    # show lilly_sprite surprise clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=1)
 
     hero "Город это их естественная среда обитая, а вот зельеварам в городах не место, из-за них же."
 
-    show lilly_sprite smile clothed_2 at center
+    # show lilly_sprite smile clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=0)
 
     hero "Именно поэтому я приехал сюда."
 
     "Несколько секунд вы молчали, перевариявая услышанное."
 
-    show lilly_sprite default clothed_1 at center
+    # show lilly_sprite default clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=5)
 
     l "Блин, как у вас там всё сложно..."
 
-    show lilly_sprite happy clothed_2 at center
+    # show lilly_sprite happy clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=4)
 
     l "У меня всё просто, беру траву, делаю с ней всякое, записываю её свойства, и всё!"
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     l "Отойду заварить чай, чайник закипел."
 
-    hide lilly_sprite
+    hide screen lila_sprite
 
     "Зачем ты ей всё это рассказал?"
 
@@ -343,15 +391,21 @@ label lilly_meet:
 
     "Через минуту Лила вернулась с чайником и двумя чашками."
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     l "Я тут, ты просто попробуй его!"
 
-    show lilly_sprite shy clothed_1 at center
+    # show lilly_sprite shy clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=2)
 
     "Ты берешь чашку из рук девушки, вы слегка касаетесь друг друга, но пытаетесь не подавать виду."
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     "Слегка отхлебнув, ты понимаешь что это действительно вкусно."
 
@@ -365,13 +419,17 @@ label lilly_meet:
 
     hero 'Этот "чай"...'
 
-    show lilly_sprite default clothed_1 at center
+    # show lilly_sprite default clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=5)
 
     "Ты специально делаешь акцент на слово чай, вызывая непонимание Лилы."
 
     hero "Дай предположить, его главный ингредиент это корни некоего растения, высушеного на холодном солнце?"
 
-    show lilly_sprite surprise clothed_1 at center
+    # show lilly_sprite surprise clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=1)
 
     l "Как?!"
 
@@ -379,17 +437,23 @@ label lilly_meet:
 
     hero "В академии где я учился мы часто заваривали подобную смесь шутки ради одногруппникам."
 
-    show lilly_sprite default clothed_1 at center
+    # show lilly_sprite default clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=5)
 
     hero "Она запутывает мысли, точнее заставляет задумываться о очевидных вещах, хотя на мышление в принципе и разговорные способности не влияет."
 
-    show lilly_sprite surprise clothed_1 at center
+    # show lilly_sprite surprise clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=1)
 
     hero "Я запомнил довольно много его вариаций, хотя это и не зелья, и могу приблизительно понять состав."
 
     "Несколько секунд Лила смотрит на тебя в шоке."
 
-    show lilly_sprite default clothed_2 at center
+    # show lilly_sprite default clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=5)
 
     l "Вау..."
 
@@ -397,21 +461,29 @@ label lilly_meet:
 
     hero "А, я Кристофер."
 
-    show lilly_sprite happy clothed_2 at center
+    # show lilly_sprite happy clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=4)
 
     l "Кристофер, ты мне прям нравишься!"
 
     l "Не хочешь пройтись по лесу вместе?!"
 
-    show lilly_sprite smile clothed_2 at center
+    # show lilly_sprite smile clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=0)
 
     l "Я уверена что мы сможем найти такие травы, которые сама бы я никогда не нашла!"
 
-    show lilly_sprite happy clothed_2 at center
+    # show lilly_sprite happy clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=4)
 
     l "Блин, да ты настоящее сокровище для такого травника как я!"
 
-    show lilly_sprite smile clothed_2 at center
+    # show lilly_sprite smile clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=0)
 
     l "Хочу с тобой дружить!"
 
@@ -439,13 +511,17 @@ label lilly_meet:
 
     l "Но в основном продаю, да."
 
-    show lilly_sprite happy clothed_1 at center
+    # show lilly_sprite happy clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=4)
 
     l "Поэтому заходи покупай!"
 
     l "Тебе я всегда рада!"
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     hero "О, супер, я как раз искал где чего-нибудь интересного прикупить."
 
@@ -457,21 +533,29 @@ label lilly_meet:
 
     l "Окей, я тебя не держу!"
 
-    show lilly_sprite happy clothed_1 at center
+    # show lilly_sprite happy clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=4)
 
     l "Чуть что заходи, на покупки или просто поболтать, думаю будут у нас интересные темы для разговора!"
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     l "Кстати, ты варишь зелья на заказ?"
 
-    show lilly_sprite default clothed_1 at center
+    # show lilly_sprite default clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=5)
 
     l "Я просто тут нашла, вернее купила, рецепт зелья, называется Зелье Смеха, но что-то мне не смешно что я его сварить не могу."
 
     l "Можешь мне сделать его?"
 
-    show lilly_sprite smile clothed_2 at center
+    # show lilly_sprite smile clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=0)
 
     l "А я тебе его рецепт бесплатно отдам, как тебе?"
 
@@ -481,7 +565,9 @@ label lilly_meet:
 
     hero "Понял, как сделаю сразу принесу. Спасибо за угощение и до встречи!"
 
-    show lilly_sprite happy clothed_2 at center
+    # show lilly_sprite happy clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=4)
 
     l "Пока пока!"
 
@@ -489,7 +575,7 @@ label lilly_meet:
 
     scene black with fade
     hide forest 1
-    hide lilly_sprite
+    hide screen lila_sprite
 
     python:
         is_lilly_meet = True
@@ -512,11 +598,15 @@ label lilly_side_potion:
 
     scene forest 1 with fade
 
-    show lilly_sprite default clothed_1 at center
+    # show lilly_sprite default clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=5)
 
     hero "Кстати, я сварил твое зелье смеха."
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     l "О, правда? Ты такой быстрый!"
 
@@ -524,21 +614,29 @@ label lilly_side_potion:
 
     "Девушка выглядит очень довольной, она берёт зелье у тебя и смотрит на него."
 
-    show lilly_sprite happy clothed_1 at center
+    # show lilly_sprite happy clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=4)
 
     l "А сейчас попробуем!"
 
     "Лили откупоривает зелье, не сильно внюхиваясь в запах, и выпивает его."
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     "Несколько секунд Лили причмакает губами, пытаясь понять вкус."
 
-    show lilly_sprite surprise clothed_1 at center
+    # show lilly_sprite surprise clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=1)
 
     l "Оно горьковатое, но не противное."
 
-    show lilly_sprite default clothed_1 at center
+    # show lilly_sprite default clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=5)
 
     l "Зелья же обычно противные, разве нет?"
 
@@ -546,7 +644,9 @@ label lilly_side_potion:
 
     hero "С чего это такое мнение?"
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     l "Ну так же должно быть, я уверена!"
 
@@ -554,7 +654,9 @@ label lilly_side_potion:
 
     hero "Вкус зелья зависит от ингредиентов и от способа..."
 
-    show lilly_sprite happy clothed_1 at center
+    # show lilly_sprite happy clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=4)
 
     "Не успеваешь ты договорить, как Лила начинает смеяться, словно взорвавшись."
 
@@ -562,17 +664,23 @@ label lilly_side_potion:
 
     "Ты не понимаешь что её так рассмешило."
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     hero "Ты же сама спросила..."
 
-    show lilly_sprite happy clothed_1 at center
+    # show lilly_sprite happy clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=4)
 
     "Лила продолжает смеяться, не обращая внимания на твои слова."
 
     "Ты понял, что это из-за зелья, и решил не обращать на это внимания."
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     "Ещё минут 10 Лила смеётся над каждой мелочью, что хоть малось может быть забавным."
 
@@ -582,29 +690,37 @@ label lilly_side_potion:
 
     l "Ладно, уже не так смешно."
 
-    "Лила пытается отмахнуться от мухи, но она не уходит. Ведь её нет."
+    "Лила пытается делать вид что отмахивается от мухи, но та не улетает. Ведь её нет."
 
     hero "Успокоилась?"
 
-    show lilly_sprite happy clothed_1 at center
+    # show lilly_sprite happy clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=4)
 
     l "Типо того, ха-ха."
 
     hero "Как ощущения?"
 
-    show lilly_sprite default clothed_1 at center
+    # show lilly_sprite default clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=5)
 
     l 'Странные...'
 
     l 'Я даже не знаю с чем сравнить...'
 
-    show lilly_sprite surprise clothed_1 at center
+    # show lilly_sprite surprise clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=1)
 
     l 'О!'
 
     l 'Это как щекотка!'
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     l "Вернее пьяная щекотка."
 
@@ -614,13 +730,15 @@ label lilly_side_potion:
 
     l 'Зелье отлично, спасибо тебе!'
 
-    show lilly_sprite surprise clothed_1 at center
+    # show lilly_sprite surprise clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=1)
 
     l 'Кстати!'
 
     "Девушка вскакивает из-за стола..."
 
-    hide lilly_sprite
+    hide screen lila_sprite
 
     "И убегает."
 
@@ -658,7 +776,9 @@ label lilly_side_potion:
 
     "Не успеваешь ты подняться с стула, как из-за дверей кладовой выглядывает злая голова."
 
-    show lilly_sprite angry clothed_1 at center
+    # show lilly_sprite angry clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=3)
 
     l 'Это моё! И мне с ним разбираться!'
 
@@ -666,7 +786,7 @@ label lilly_side_potion:
 
     "Лили несколько секунд сверлит тебя взглядом и прячеться в кладовую обратно."
 
-    hide lilly_sprite
+    hide screen lila_sprite
 
     "Однако где-то оттуда разносится слабый голосок."
 
@@ -674,7 +794,7 @@ label lilly_side_potion:
 
     "После этого дом замирает на минутку, а потом вновь погружается в агонии уборки."
 
-    "Тем временем, ты только улыбаешься от выходок Лили."
+    "Тем временем, ты только улыбаешься от выходок Лилы."
 
     "В таких моментах она чертовски милая!"
 
@@ -682,23 +802,31 @@ label lilly_side_potion:
 
     "..."
 
-    "Неизвестно сколько времени спустя Лили закончила уборку и села за стол."
+    "Неизвестно сколько времени спустя Лила закончила уборку и села за стол."
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     l 'Вот, я не знаю что за листья, но они достаточно ярко светятся в темноте.'
 
-    show lilly_sprite default clothed_1 at center
+    # show lilly_sprite default clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=5)
 
     l 'Если раньше я работала с обычными корешками и стебельками, эта штука...'
 
-    show lilly_sprite surprise clothed_1 at center
+    # show lilly_sprite surprise clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=1)
 
     l 'Она буквально светится!'
 
     l 'Это уже магия какая-то!'
 
-    show lilly_sprite default clothed_1 at center
+    # show lilly_sprite default clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=5)
 
     l 'Мне кажется ты сможешь найти ей лучшее применение.'
 
@@ -712,7 +840,9 @@ label lilly_side_potion:
 
     hero 'Немного знакомая штука, на самом деле...'
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     l 'Так ты её знаешь, отлично!'
 
@@ -726,23 +856,31 @@ label lilly_side_potion:
 
     hero "Нууу, я вижу что это листки, и они светятся..."
 
-    show lilly_sprite happy clothed_1 at center
+    # show lilly_sprite happy clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=4)
 
     "На твой не слишком умный или смешной комментарий Лила усмехнулась, видимо ей понравилась шутка."
 
     hero 'Раньше вообще не заморачивались над именами растений.'
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     hero 'Ладно, думаю я смогу что-то со временем сварганить из них. Сколько с меня?'
 
-    show lilly_sprite default clothed_2 at center
+    # show lilly_sprite default clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=5)
 
     l 'Нисколько?'
 
     hero 'А?'
 
-    show lilly_sprite smile clothed_2 at center
+    # show lilly_sprite smile clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=0)
 
     l 'Ты объясни, зачем они мне? Ты хоть зелья варишь, я то в таких делах не разбираюсь.'
 
@@ -752,7 +890,9 @@ label lilly_side_potion:
 
     l 'То, что они редкие, я знаю, я видела их только один раз.'
 
-    show lilly_sprite happy clothed_2 at center
+    # show lilly_sprite happy clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=4)
 
     l 'Я буду рада если ты покажешь на что потратил эти Светолистья, какое зелье сварил или чем ты ещё занимаешься.'
 
@@ -766,15 +906,19 @@ label lilly_side_potion:
 
     "Вы в шутку пожали руки"
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     l 'Приятно иметь с вами дело, мистер зельевар.'
 
     "В шутливой форме сказала Лила, ты решил подыграть."
 
-    show lilly_sprite happy clothed_1 at center
+    # show lilly_sprite happy clothed_1 at center
 
-    hero 'Не могу не согласиться относительно вас, госпожа травница'
+    show screen lila_sprite(pos=0, face=4)
+
+    hero 'Не могу не согласиться и в отношении, госпожа травница'
 
     l 'Блин, так прикольно звучит, когда меня называют госпожей, ха-ха.'
 
@@ -782,11 +926,15 @@ label lilly_side_potion:
 
     l 'Тогда и ты будешь моим господином, если будешь вести себя соответствующе!'
 
-    show lilly_sprite smile clothed_1 at center
+    # show lilly_sprite smile clothed_1 at center
+
+    show screen lila_sprite(pos=0, face=0)
 
     "Несколько секунд девушка смотрела на тебя не меняя выражение лица."
 
-    show lilly_sprite shy clothed_2 at center
+    # show lilly_sprite shy clothed_2 at center
+
+    show screen lila_sprite(pos=1, face=2)
 
     "В какой-то момент до неё дошло, как именно звучали её слова, и она быстро перевела тему."
 
@@ -796,13 +944,14 @@ label lilly_side_potion:
 
     scene black with fade
     hide forest 1
-    hide lilly_sprite
+    hide screen lila_sprite
 
     python:
         for i in active_quest['side']:
             if i['quest_id'] == 's0':
                 active_quest['side'].remove(i)
-                add_item(17, 1)
+                is_s0_complete = True
+                add_item_to_inventory(inventory, 17, 1)
                 # lilly_shop.append(get_item_by_id())
 
     jump lilly_home

@@ -269,14 +269,36 @@ screen quest_screen(selected_quest_id = 'None', is_choice = False):
                     text_size 28
                     action [Hide("quest_screen"), Show("quest_screen", None, selected_quest_id = i['quest_id'], is_choice = is_choice)]
 
+image quest_button_hover = 'gui/inventory/quest_button_active.png'
+image quest_button_idle = 'gui/inventory/quest_button_idle.png'
+
+
 screen show_quest_button():
-    imagebutton:
-        xysize (100, 100)
+    button:
+        xysize (95, 93)
         yalign 0.05
         xalign 0.88
-        idle 'gui/inventory/quest_button_idle.png'
-        hover 'gui/inventory/quest_button_active.png'
+
+        style "empty"
+
+        add 'gui/inventory/quest_button_idle.png'
+
+        hovered [Function(renpy.show, "quest_button_hover", at_list=[quest_button_fade_transition], layer='screens')]
+        unhovered [Function(renpy.hide, "quest_button_hover", layer='screens')]
+
+        # idle 'gui/inventory/quest_button_idle.png'
+        # hover 'gui/inventory/quest_button_active.png'
         action Show("quest_screen")
+
+transform quest_button_fade_transition:
+    xysize (95, 93)
+    yalign 0.05
+    xalign 0.88
+    on show:
+        alpha 0.0
+        linear 0.1 alpha 1.0
+    on hide:
+        linear 0.1 alpha 0.0
 
 label open_quest:
     call screen quest_screen()

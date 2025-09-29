@@ -1,56 +1,31 @@
-layeredimage elsa_sprite:
-    group pose:
-        attribute pos_1 default:
-            "characters/elsa/elsa-pos1.png"
-        attribute pos_2:
-            "characters/elsa/elsa-pos2.png"
-        attribute pos_2_phone:
-            "characters/elsa/elsa-pos2-phone.png"
+define elsa_pose_list = ['elsa-pos1', 'elsa-pos2', 'elsa-pos2-phone']
+define elsa_eyes_list = [
+    'elsa-eye-simple', # 0
+    'elsa-eye-angry',  # 1
+    'elsa-eye-close',  # 2
+    'elsa-eye-close-angry',  # 3
+    'elsa-eye-close-left',  # 4
+    'elsa-eye-close-right',  # 5
+    'elsa-eye-shocked', # 6
+    'elsa-eye-spy' # 7
+    ]
+define elsa_mouth_list = [
+    'elsa-mouth-smile', # 0
+    'elsa-mouth-simple', # 1
+    'elsa-mouth-angry', # 2
+    'elsa-mouth-shocked', # 3
+    'elsa-mouth-smile-simple', # 4
+    'elsa-mouth-spy' # 5
+    ]
+define elsa_jacket_list = ['elsa-jacket1', 'elsa-jacket2']
 
-    group jacket:
-        attribute jacket_1 default:
-            "characters/elsa/elsa-jacket1.png"
-        attribute jacket_2:
-            "characters/elsa/elsa-jacket2.png"
-
-    group pircing:
-        attribute pircing:
-            "characters/elsa/elsa-pircing.png"
-
-    group phone:
-        attribute phone_1:
-            "characters/elsa/elsa-phone.png"
-
-    group eyes:
-        attribute eye-simple default:
-            "characters/elsa/elsa-eye-simple.png"
-        attribute eye-angry:
-            "characters/elsa/elsa-eye-angry.png"
-        attribute eye-close:
-            "characters/elsa/elsa-eye-close.png"
-        attribute eye-close_angry:
-            "characters/elsa/elsa-eye-close-angry.png"
-        attribute eye-close_left:
-            "characters/elsa/elsa-eye-close-left.png"
-        attribute eye-clone_right:
-            "characters/elsa/elsa-eye-close-right.png"
-        attribute eye-shocked:
-            "characters/elsa/elsa-eye-shocked.png"
-        attribute eye-spy:
-            "characters/elsa/elsa-eye-spy.png"
-
-    group mouth:
-        attribute smile default:
-            "characters/elsa/elsa-mouth-smile.png"
-        attribute simple:
-            "characters/elsa/elsa-mouth-simple.png"
-        attribute angry:
-            "characters/elsa/elsa-mouth-angry.png"
-        attribute shocked:
-            "characters/elsa/elsa-mouth-shocked.png"
-        attribute smile-simple:
-            "characters/elsa/elsa-mouth-smile-simple.png"
-        attribute spy:
-            "characters/elsa/elsa-mouth-spy.png"
-
-    at default_transform
+screen elsa_sprite(pos=0, mouth=0, eyes=0, jacket=0, pircing=0, phone=0, x_pos = 0.5):
+    add 'characters/elsa/'+elsa_pose_list[pos]+".png" at default_transform xalign x_pos
+    add 'characters/elsa/'+elsa_mouth_list[mouth]+".png" at default_transform xalign x_pos
+    add 'characters/elsa/'+elsa_eyes_list[eyes]+".png" at default_transform xalign x_pos
+    if jacket != 0:
+        add 'characters/elsa/'+elsa_jacket_list[jacket-1]+".png" at default_transform xalign x_pos
+    if pircing != 0:
+        add 'characters/elsa/elsa-pircing.png' at default_transform xalign x_pos
+    if phone != 0:
+        add 'characters/elsa/elsa-phone.png' at default_transform xalign x_pos
