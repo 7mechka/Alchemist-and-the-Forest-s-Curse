@@ -38,7 +38,7 @@ label home:
                 if i['quest_id'] == 'm0':
                     active_quest['main'].remove(i)
                     active_quest['main'].append(get_quest_by_id('m1'))
-                    add_item(4, 1)  # Добавляем рецепт зелья бреда
+                    add_item_to_inventory(inventory, 4, 1)  # Добавляем рецепт зелья бреда
                     update_unlock_recipes()
         if is_potion_crafted:
             for i in active_quest['main']:
@@ -64,13 +64,16 @@ label home:
             python:
                 change_time()
             jump home
+            return
         "Пойти на работу" if time_id == 0:
             call hide_gui 
             jump work
+            return
         "Спуститься в подвал":
             call hide_gui 
             hide home night with fade
             call transition("basement") 
+            return
         "Пойти в город":
             if time_id == 0:
                 call hide_gui 
@@ -84,6 +87,7 @@ label home:
             $ is_ball_active = False
             call screen map
             jump home
+            return
 
 label work:
     # Эта метка вызывается при нажатии на кнопку работы.
@@ -194,3 +198,5 @@ label work:
     hide work
 
     jump home
+
+    return

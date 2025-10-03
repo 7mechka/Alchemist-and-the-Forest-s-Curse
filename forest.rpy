@@ -108,6 +108,7 @@ define text_list = {
 default forest_stages = [0, 0, 0, 0]
 default default_forest_room_list = [[], [], [], []]
 default forest_room_list = [[], [], [], []]
+define room = 1  # Текущая комната леса
 
 
 init python:
@@ -212,9 +213,7 @@ init python:
             # Если в комнате леса количество ингредиентов меньше на более чем 30%, чем в дефолтном списке, то стадия уменьшается
             elif len(forest_room_list[i]) < len(default_forest_room_list[i]) * 0.7:
                 if forest_stages[i] > 1:
-                    forest_stages[i] -= 1
-            
-    
+                    forest_stages[i] -= 1 
 
 screen forest_gui_screen(room = 1):
     zorder 100
@@ -226,9 +225,11 @@ screen forest_gui_screen(room = 1):
             action [
                 RemoveFromSet(forest_room_list[room-1], i),  # Удаляем предмет из списка
                 Function(
-                    add_item, 
-                    id=i['id'], 
+                    add_item_to_inventory, 
+                    item_id=i['id'], 
+                    target_inventory=inventory,
                 ),
+                Function(add_notification, f"Вы собрали: {i['name']}"),
             ]
             tooltip i['description']
             xalign i["pos_x"]
@@ -236,7 +237,8 @@ screen forest_gui_screen(room = 1):
             xsize 180
             ysize 180
 
-label forest_handler(room = 1):
+label forest_handler():
+    # 1. Отображение сцены (Фон)
     if room == 1:
         show forest 1 with fade
     elif room == 2:
@@ -246,22 +248,40 @@ label forest_handler(room = 1):
     elif room == 4:
         show forest 4 with fade
 
-    call forest_label(room) from _call_forest_label
-
+    # 2. Отображение текста
+    call forest_label(room)
+    
+    # 3. Отображение GUI (показ экрана сбора ингредиентов)
     show screen forest_gui_screen(room)
     
+    # 4. Меню навигации (Итеративный цикл)
     menu:
+        # Продвижение вглубь леса (jump для перехода)
         "Пойти вглудь леса" if room < 4:
             hide screen forest_gui_screen
-            call forest_handler(room + 1) from _call_forest_handler
+            $ room += 1
+            jump forest_handler
+            
+        # Вернуться в город (Полный выход)
         "Вернуться в город" if room == 1:
-            call hide_gui from _call_hide_gui_2
+            # Скрываем GUI леса 
             hide screen forest_gui_screen
+            call hide_gui # (Если это функция, скрывающая другие элементы GUI)
             scene black with fade
-            call screen map()
+            
+            # Вызов экрана карты или переход на метку, управляющую картой.
+            call screen map() 
+            
+            # Единственный return, завершающий исходный call.
+            return
+            
+        # Вернуться назад (jump для перехода)
         "Вернуться назад" if room > 1:
             hide screen forest_gui_screen
-            call forest_handler(room - 1) from _call_forest_handler_1
+            $ room -= 1
+            jump forest_handler
+            
+    return # Этот return будет достигнут только после выхода из menu
 
 label forest_label(room=1):
     $ text = text_list['room ' + str(room)]['stage ' + str(forest_stages[room - 1])]

@@ -178,9 +178,9 @@ define itemList = [
     {
         "name": "Шар предсказания",
         "description": "Мистический шар для предсказания. Может помочь с активными заданиями, но не бесплатно.",
-        "icon": "gui/ingredients/ball_idle.png",
-        "icon_hover": "gui/ingredients/ball_hover.png",
-        "big_icon": "gui/ingredients/ball_idle.png",
+        "icon": "gui/items/ball_idle.png",
+        "icon_hover": "gui/items/ball_hover.png",
+        "big_icon": "gui/items/ball_idle.png",
         'rarity': 'uncommon',
         "count": 1,
         "type": "misc",

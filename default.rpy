@@ -1,9 +1,9 @@
 # Определение персонажей игры.
 define hero = Character('Кристофер', color="#473cc2")
 define u = Character('???', color="#8259ff")
-define l = Character('Льюис', color="#9aae37")
 define s = Character('Мысли', color="#5b5555")
-define l = Character('Лилли', color="#59ffac")
+define l = Character('Лила', color="#59ffac")
+define e = Character('Эльза', color="#59a6ff")
 default time_id = 2 # 0 — день, 1 — вечер, 2 — ночь
 default used_ingredient_list = []
 default ingredient_count = 0  # Счётчик использованных ингредиентов
