@@ -4,6 +4,72 @@
         yzoom 0.385
         yoffset 25
 
+init python:
+    def close_inventory():
+        global is_inventory_open
+        is_inventory_open = False
+
+        renpy.hide_screen("new_inventory_screen")
+        renpy.hide_screen("choice_filter")
+
+        renpy.show_screen("show_inventory_button")
+
+    def open_inventory():
+        global is_inventory_open
+        is_inventory_open = True
+
+        renpy.show_screen("new_inventory_screen")
+
+        renpy.show_screen("show_inventory_button")
+
+    def close_quest():
+        global is_quest_open
+        is_quest_open = False
+
+        renpy.hide_screen("new_quest_screen")
+
+        renpy.show_screen("show_quest_button")
+
+    def open_quest():
+        global is_quest_open
+        is_quest_open = True
+
+        renpy.show_screen("new_quest_screen")
+
+        renpy.show_screen("show_quest_button")
+
+    def close_map():
+        global is_map_open
+        is_map_open = False
+
+        renpy.hide_screen("map")
+
+        renpy.show_screen("show_map_button")
+
+    def open_map():
+        global is_map_open
+        is_map_open = True
+
+        renpy.show_screen("map")
+
+        renpy.show_screen("show_map_button")
+
+    def close_all():
+        close_inventory()
+        close_quest()
+        close_map()
+
+    def show_gui():
+        renpy.show_screen("show_map_button")
+        renpy.show_screen("show_inventory_button")
+        renpy.show_screen("show_quest_button")
+
+    def hide_gui():
+        renpy.hide_screen("show_map_button")
+        renpy.hide_screen("show_inventory_button")
+        renpy.hide_screen("show_quest_button")
+
+
 # Начальная заставка-интро
 label intro:
     show 0-1
@@ -420,11 +486,13 @@ label open_shop:
 label hide_gui:
     hide screen show_inventory_button
     hide screen show_quest_button
+    hide screen show_map_button
     return
 
 label show_gui:
     show screen show_inventory_button()
     show screen show_quest_button()
+    show screen show_map_button()
     return
 
 label start:
@@ -437,36 +505,6 @@ label start:
     jump home
 
     # return
-
-screen map():
-    add "gui/map.png" at fade_in_out:
-        fit "cover"
-
-    textbutton "Дом":
-        pos (1100, 900)
-        text_color "FFFFFF"
-        text_hover_color "FFD000"
-        action [Function(renpy.call, "transition", "home")]
-    
-    textbutton "Лес":
-        pos (250, 450)
-        text_color "FFFFFF"
-        text_hover_color "FFD000"
-        action [Function(renpy.call, "transition", "forest_handler")]
-
-    if is_lilly_know == True:
-        if is_lilly_meet == False:
-            textbutton "Травник":
-                pos (1200, 500)
-                text_color "FFFFFF"
-                text_hover_color "FFD000"
-                action [Jump("lilly_home")]
-        else:
-            textbutton 'Лилли':
-                pos (1200, 500)
-                text_color "FFFFFF"
-                text_hover_color "FFD000"
-                action [Jump("lilly_home")]
 
 transform fade_in_out:
     alpha 0.0

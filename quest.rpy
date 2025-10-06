@@ -195,7 +195,6 @@ screen quest_screen(selected_quest_id = 'None', is_choice = False):
             pos(50,-20)
             spacing 20
             for i in active_quest['main']:
-
                 textbutton i['name']:
                     if selected_quest_id == i['quest_id']:
                         text_color "FFD000"
@@ -269,9 +268,105 @@ screen quest_screen(selected_quest_id = 'None', is_choice = False):
                     text_size 28
                     action [Hide("quest_screen"), Show("quest_screen", None, selected_quest_id = i['quest_id'], is_choice = is_choice)]
 
+default is_quest_open = False
+
+screen new_quest_screen(selected = None):
+    zorder 200
+    modal False
+
+    fixed at quest_open:
+        add "gui/inventory/quest_panel.png" xalign 1.0 yalign 2.0 
+
+        fixed:
+            xpos 450
+            ypos 80
+
+        
+            text "Задания":
+                xpos 880
+                ypos 155
+                size 40
+                color "ffd000"
+                font gui.name_text_font
+
+            text "Активные задания":
+                xpos 625
+                ypos 255
+                size 32
+                color "ffd000"
+                font gui.name_text_font
+
+            text "Выбранное задание":
+                xpos 1010
+                ypos 255
+                size 32
+                color "ffd000"
+                font gui.name_text_font
+
+            vbox:
+                for i in active_quest['main']:
+                    textbutton i['name']:
+                        if selected == i['quest_id']:
+                            text_color "FFD000"
+                        else:
+                            text_color "FFFFFF"
+                            text_hover_color "FFD000"
+                        background "gui/inventory/quest_line.png"
+                        xpos 595
+                        ypos 335
+                        text_size 28
+                        bottom_padding 10
+                        action [Hide("new_quest_screen"), Show("new_quest_screen", None, selected = i['quest_id'])]
+                for i in active_quest['side']:
+                    textbutton i['name']:
+                        if selected == i['quest_id']:
+                            text_color "FFD000"
+                        else:
+                            text_color "FFFFFF"
+                            text_hover_color "FFD000"
+                        text_size 28
+                        action [Hide("new_quest_screen"), Show("new_quest_screen", None, selected = i['quest_id'])]
+
+            vbox:
+                $ desc_text = ''
+                if selected != None and selected[0] == 'm':
+                    for i in active_quest['main']:
+                        if i['quest_id'] == selected:
+                            $ desc_text = i['desc']
+
+                elif selected != None and selected[0] == 's':
+                    for i in active_quest['side']:
+                        if i['quest_id'] == selected:
+                            $ desc_text = i['desc']
+
+                $ need_scroll = len(desc_text) >= 350
+                viewport:
+                    xpos 1010
+                    ypos 350
+                    xsize 940
+                    ysize 450  
+                    mousewheel True
+                    if need_scroll:
+                        scrollbars "vertical" 
+                    text desc_text:
+                        size 22
+                        xsize 315
+                        color 'FFFFFF'
+
+    key "K_ESCAPE" action [SetScreenVariable('is_quest_open', False), Hide("new_quest_screen"), Show('show_quest_button'), Show("show_inventory_button")]
+
+transform quest_open:
+    xanchor 0.9999
+    zoom 0
+    yoffset 100
+    xalign 0.85
+    # ypos 70
+    ease 0.4 zoom 1.0 yoffset 0
+    on hide:
+        ease 0.4 zoom 0 yoffset 100
+
 image quest_button_hover = 'gui/inventory/quest_button_active.png'
 image quest_button_idle = 'gui/inventory/quest_button_idle.png'
-
 
 screen show_quest_button():
     button:
@@ -283,12 +378,13 @@ screen show_quest_button():
 
         add 'gui/inventory/quest_button_idle.png'
 
-        hovered [Function(renpy.show, "quest_button_hover", at_list=[quest_button_fade_transition], layer='screens')]
+        hovered [Function(renpy.show, "quest_button_hover", at_list=[quest_button_fade_transition], layer='screens', zorder=201)]
         unhovered [Function(renpy.hide, "quest_button_hover", layer='screens')]
 
-        # idle 'gui/inventory/quest_button_idle.png'
-        # hover 'gui/inventory/quest_button_active.png'
-        action Show("quest_screen")
+        if is_quest_open:
+            action [Function(close_all)]
+        else:
+            action [Function(close_all), Function(open_quest)]
 
 transform quest_button_fade_transition:
     xysize (95, 93)

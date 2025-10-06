@@ -74,20 +74,20 @@ label home:
             hide home night with fade
             call transition("basement") 
             return
-        "Пойти в город":
-            if time_id == 0:
-                call hide_gui 
-                hide home day with fade
-            elif time_id == 1:
-                call hide_gui 
-                hide home evening with fade
-            elif time_id == 2:
-                call hide_gui 
-                hide home night with fade
-            $ is_ball_active = False
-            call screen map
-            jump home
-            return
+        # "Пойти в город":
+        #     if time_id == 0:
+        #         call hide_gui 
+        #         hide home day with fade
+        #     elif time_id == 1:
+        #         call hide_gui 
+        #         hide home evening with fade
+        #     elif time_id == 2:
+        #         call hide_gui 
+        #         hide home night with fade
+        #     $ is_ball_active = False
+        #     call screen map
+        #     jump home
+        #     return
 
 label work:
     # Эта метка вызывается при нажатии на кнопку работы.

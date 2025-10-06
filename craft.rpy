@@ -216,7 +216,7 @@ label basement:
     call show_gui
     
     menu:    
-        "Варить зелье" if has_ingredients:
+        "Варить зелье":
             call screen craft_screen
             jump basement
             

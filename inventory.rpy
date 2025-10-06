@@ -92,13 +92,13 @@ screen show_inventory_button():
 
         add "gui/inventory/inventory_button_idle.png"
 
-        hovered [Function(renpy.show, "inventory_button_hover", at_list=[inventory_button_fade_transition], layer='screens')]
+        hovered [Function(renpy.show, "inventory_button_hover", at_list=[inventory_button_fade_transition], layer='screens', zorder=201)]
         unhovered [Function(renpy.hide, "inventory_button_hover", layer='screens')]
 
         if is_inventory_open:
-            action [SetScreenVariable('is_inventory_open', False), Hide("new_inventory_screen"), Hide("choice_filter")]
+            action [Function(close_all)]
         else:
-            action [SetScreenVariable('is_inventory_open', True), Show("new_inventory_screen")]
+            action [Function(close_all), Function(open_inventory)]
 
 label open_inventory:
 
@@ -178,6 +178,8 @@ screen new_inventory_screen(filter='ingredients'):
             ypos 580
             text str(money) size 22 xpos 10 color "FFD000" font gui.name_text_font
             at item_transform
+
+    key "K_ESCAPE" action [SetScreenVariable('is_inventory_open', False), Hide("new_inventory_screen"), Show('show_quest_button'), Show("show_inventory_button")]
     
 transform inventory_open:
     xanchor 0.9999
