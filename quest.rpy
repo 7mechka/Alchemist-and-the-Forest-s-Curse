@@ -3,6 +3,8 @@ init -20 python:
         global ing_count_limit
         ing_count_limit += 1
 
+default active_quests = []      # Список ID активных заданий
+default completed_quests = []   # Список ID выполненных заданий
 
 define diff_0_quest_item_list = [
     {
@@ -44,65 +46,122 @@ default is_lilly_potion_crafted = False
 
 default is_s0_complete = False
 
-define quest_list = {
-    'main': [
-        {
-            'name': 'Поиск ингредиентов',
-            'desc': 'Вы новенький в этом городе, но с большими амбициями и знаниями зельеварения. \nОднако, чтобы варить зелья, нужны ингредиенты, но у вас их нет. \nМожет, есть где-то в этой деревне место, где можно бесплатно получить простые растительные ингредиенты?',
-            'quest_id': 'm0'
-        },
-        {
-            'name': 'Первое зелье',
-            'desc': 'Раздобыв базовые ингредиенты, можно приступить к варке зелий! Однако есть проблемы, вы утеряли почти все свои записи и рецепты зелий... \nВы можете попытать удачи, и случайно сварить зелье, просто бросая всё подряд в котёл... \nИли купить в какого-то торговца полноценный рецепт зелья... Выбор за вами! Хотя кое что можно вспомнить...',
-            'quest_id': 'm1'
-        },
-        {
-            'name': 'Первое знакомство',
-            'desc': 'Очевидно, что в новом для вас месте вы будете отшельником для окружающих и самого себя, но ведь это можно исправить, верно? \nВы, конечно, не славитесь социальными навыками, но хотя бы какое-то знакомство завести нужно. \nКоли вам и дальше варить и продавать зелья в этой деревне, да и жить тоже, может, по крайне мере, стоит познакомиться с местными магазинчиками и торговцами? \nВ частности, будет полезным познакомится с местным травником?',
-            'quest_id': 'm2'
-        },
-    ],
-    'side': [
-        {
-            'name': 'Зелье для травника',
-            'desc': 'Травница Лила попросила вас сварить простенькое зелье. Было бы грубо отказать, тем более за бесплатный рецепт зелья, верно?',
-            'quest_id': 's0'
-        }
-    ]
-}
+# define quest_list = {
+#     'main': [
+#         {
+#             'name': 'Поиск ингредиентов',
+#             'desc': 'Вы новенький в этом городе, но с большими амбициями и знаниями зельеварения. \nОднако, чтобы варить зелья, нужны ингредиенты, но у вас их нет. \nМожет, есть где-то в этой деревне место, где можно бесплатно получить простые растительные ингредиенты?',
+#             'quest_id': 'm0'
+#         },
+#         {
+#             'name': 'Первое зелье',
+#             'desc': 'Раздобыв базовые ингредиенты, можно приступить к варке зелий! Однако есть проблемы, вы утеряли почти все свои записи и рецепты зелий... \nВы можете попытать удачи, и случайно сварить зелье, просто бросая всё подряд в котёл... \nИли купить в какого-то торговца полноценный рецепт зелья... Выбор за вами! Хотя кое что можно вспомнить...',
+#             'quest_id': 'm1'
+#         },
+#         {
+#             'name': 'Первое знакомство',
+#             'desc': 'Очевидно, что в новом для вас месте вы будете отшельником для окружающих и самого себя, но ведь это можно исправить, верно? \nВы, конечно, не славитесь социальными навыками, но хотя бы какое-то знакомство завести нужно. \nКоли вам и дальше варить и продавать зелья в этой деревне, да и жить тоже, может, по крайне мере, стоит познакомиться с местными магазинчиками и торговцами? \nВ частности, будет полезным познакомится с местным травником?',
+#             'quest_id': 'm2'
+#         },
+#     ],
+#     'side': [
+#         {
+#             'name': 'Зелье для травника',
+#             'desc': 'Травница Лила попросила вас сварить простенькое зелье. Было бы грубо отказать, тем более за бесплатный рецепт зелья, верно?',
+#             'quest_id': 's0'
+#         }
+#     ]
+# }
 
-default active_quest = {
-    'main': [
-        {
-            'name': 'Поиск ингредиентов',
-            'desc': 'Вы новенький в этом городе, но с большими амбициями и знаниями в зельеварении. \nОднако, чтобы варить зелья, нужны ингредиенты, но у вас их нет. \nМожет, есть где-то в этой деревне место, где можна бесплатно получить простые растительные ингредиенты?',
-            'quest_id': 'm0'
-        },
-    ],
-    'side' : []
-}
+# default active_quest = {
+#     'main': [
+#         {
+#             'name': 'Поиск ингредиентов',
+#             'desc': 'Вы новенький в этом городе, но с большими амбициями и знаниями в зельеварении. \nОднако, чтобы варить зелья, нужны ингредиенты, но у вас их нет. \nМожет, есть где-то в этой деревне место, где можна бесплатно получить простые растительные ингредиенты?',
+#             'quest_id': 'm0'
+#         },
+#     ],
+#     'side' : []
+# }
+
+init python:
+    import json
+
+    # --- 1. ЗАГРУЗКА ВСЕХ КВЕСТОВ ИЗ JSON ПРИ СТАРТЕ ИГРЫ ---
+    all_quests = {}
+    try:
+        # Получаем правильный путь к файлу
+        quests_file_path = renpy.loader.get_path("quests.json")
+        with open(quests_file_path, 'r', encoding='utf-8') as f:
+            all_quests_raw = json.load(f)
+            # Преобразуем список квестов в удобный словарь для быстрого доступа по ID
+            for category in all_quests_raw.values():
+                for quest in category:
+                    all_quests[quest['quest_id']] = quest
+    except Exception as e:
+        # Если файл не найден или в нем ошибка, выводим уведомление
+        renpy.notification("Ошибка загрузки квестов: {}".format(e))
+
+
+    # --- 2. УДОБНЫЕ ФУНКЦИИ ДЛЯ УПРАВЛЕНИЯ КВЕСТАМИ ---
+
+    def get_quest_by_id(quest_id):
+        """Возвращает полную информацию о квесте по его ID."""
+        return all_quests.get(quest_id)
+
+    def start_quest(quest_id):
+        """
+        Добавляет квест в список активных, если он существует,
+        не активен и не был выполнен ранее.
+        """
+        if quest_id not in all_quests:
+            print("Попытка начать несуществующий квест: {}".format(quest_id))
+            return
+
+        if quest_id not in active_quests and quest_id not in completed_quests:
+            active_quests.append(quest_id)
+            renpy.notify("Новое задание: {}".format(all_quests[quest_id]['name']))
+
+    def complete_quest(quest_id):
+        """Перемещает квест из активных в выполненные."""
+        if quest_id in active_quests:
+            active_quests.remove(quest_id)
+            completed_quests.append(quest_id)
+            renpy.notify("Задание выполнено: {}".format(all_quests[quest_id]['name']))
+
+    def is_quest_active(quest_id):
+        """Проверяет, активен ли квест."""
+        return quest_id in active_quests
+
+    def is_quest_completed(quest_id):
+        """Проверяет, был ли квест уже выполнен."""
+        return quest_id in completed_quests
+
+    def get_active_quests_details():
+        """Возвращает список полных данных всех активных квестов."""
+        return [get_quest_by_id(qid) for qid in active_quests]
 
 
 init python:
-    global active_quest, quest_list
-    def generate_id_hint_quest():
-        count = 0
-        for i in active_quest['side']:
-            if i['quest_id'][:2] == 'sh':
-                count += 1
-        return count
+#     global active_quest, quest_list
+#     def generate_id_hint_quest():
+#         count = 0
+#         for i in active_quest['side']:
+#             if i['quest_id'][:2] == 'sh':
+#                 count += 1
+#         return count
 
-    def get_quest_by_id(id, List = quest_list):
-        if id[0] == 'm':
-            for item in List['main']:
-                if item['quest_id'] == id:
-                    returned_item = item.copy()
-                    return returned_item
-        if id[0] == 's':
-            for item in List['side']:
-                if item['quest_id'] == id:
-                    returned_item = item.copy()
-                    return returned_item
+#     def get_quest_by_id(id, List = quest_list):
+#         if id[0] == 'm':
+#             for item in List['main']:
+#                 if item['quest_id'] == id:
+#                     returned_item = item.copy()
+#                     return returned_item
+#         if id[0] == 's':
+#             for item in List['side']:
+#                 if item['quest_id'] == id:
+#                     returned_item = item.copy()
+#                     return returned_item
 
     def generate_hint_quest(quest_id, diff = 0):
         if diff == 0:
@@ -168,113 +227,13 @@ init python:
             else:
                 return 2
 
-screen quest_screen(selected_quest_id = 'None', is_choice = False):
-    add "gui/inventory/new_bg_quest2.png"
-    zorder 200
-    modal True
-
-    # Кнопка закрытия
-    imagebutton:
-        idle "gui/inventory/inventory_exit_idle.png"
-        hover "gui/inventory/inventory_exit_hover.png"
-        if is_choice:
-            action [Hide("quest_screen"), Return(0)]
-        else:
-            action Hide("quest_screen")
-        pos (70, 70)
-
-    vbox:
-        pos(70, 180)
-        xsize(200)
-        spacing 50
-        text 'Основные':
-            pos(50,0)
-            size 48
-            color "ffd000"
-        vbox:
-            pos(50,-20)
-            spacing 20
-            for i in active_quest['main']:
-                textbutton i['name']:
-                    if selected_quest_id == i['quest_id']:
-                        text_color "FFD000"
-                    else:
-                        text_color "FFFFFF"
-                        text_hover_color "FFD000"
-                    text_size 28
-                    action [Hide("quest_screen"), Show("quest_screen", None, selected_quest_id = i['quest_id'], is_choice = is_choice)]
-    vbox:
-        pos(500, 180)
-        $ desc_text = ''
-        $ request_text = ''
-        if selected_quest_id[0] == 'm':
-            for i in active_quest['main']:
-                if i['quest_id'] == selected_quest_id:
-                    $ desc_text = i['desc']
-                    if 'request' in i:
-                        for j in i['request']:
-                            $ request_text += f"- {j['name']} ({j['count']})\n"
-        else:
-            for i in active_quest['side']:
-                if i['quest_id'] == selected_quest_id:
-                    $ desc_text = i['desc']
-                    if 'request' in i:
-                        for j in i['request']:
-                            $ request_text += f"- {j['name']} ({j['count']})\n"
-        $ need_scroll = len(desc_text) >= 350
-        viewport:
-            xsize 940
-            ysize 400  
-            mousewheel True
-            if need_scroll:
-                scrollbars "vertical" 
-            text desc_text:
-                size 43
-                xsize (940)
-                color 'FFFFFF'
-        text request_text:
-            # Высота текста описания не больше 450, иначе прокрутка
-            ypos (25)
-            size 38
-            color 'FFFFFF'
-            xsize (940)
-        if is_choice and selected_quest_id != 'None':
-            textbutton 'Выбрать':
-                text_color 'FFFFFF'
-                text_hover_color "FF0000"
-                action [Return(selected_quest_id)]
-
-
-
-    vbox:
-        pos(1480, 180)
-        xsize(200)
-        spacing 50
-        text 'Побочные':
-            pos(50,0)
-            size 48
-            color "ffd000"
-        vbox:
-            pos(50,-20)
-            spacing 20
-            for i in active_quest['side']:
-
-                textbutton i['name']:
-                    if selected_quest_id == i['quest_id']:
-                        text_color "FFD000"
-                    else:
-                        text_color "FFFFFF"
-                        text_hover_color "FFD000"
-                    text_size 28
-                    action [Hide("quest_screen"), Show("quest_screen", None, selected_quest_id = i['quest_id'], is_choice = is_choice)]
-
 default is_quest_open = False
 
 screen new_quest_screen(selected = None):
     zorder 200
     modal False
 
-    fixed at quest_open:
+    fixed at [(quest_open if selected is None else null_transform), quest_close]:
         add "gui/inventory/quest_panel.png" xalign 1.0 yalign 2.0 
 
         fixed:
@@ -304,41 +263,29 @@ screen new_quest_screen(selected = None):
                 font gui.name_text_font
 
             vbox:
-                for i in active_quest['main']:
-                    textbutton i['name']:
-                        if selected == i['quest_id']:
-                            text_color "FFD000"
-                        else:
-                            text_color "FFFFFF"
-                            text_hover_color "FFD000"
-                        background "gui/inventory/quest_line.png"
-                        xpos 595
-                        ypos 335
-                        text_size 28
-                        bottom_padding 10
-                        action [Hide("new_quest_screen"), Show("new_quest_screen", None, selected = i['quest_id'])]
-                for i in active_quest['side']:
-                    textbutton i['name']:
-                        if selected == i['quest_id']:
-                            text_color "FFD000"
-                        else:
-                            text_color "FFFFFF"
-                            text_hover_color "FFD000"
-                        text_size 28
-                        action [Hide("new_quest_screen"), Show("new_quest_screen", None, selected = i['quest_id'])]
-
+                $ active_quests_list = get_active_quests_details()
+                if not active_quests_list:
+                    pass
+                else:
+                    for i in active_quests_list:
+                        textbutton i['name']:
+                            if selected == i['quest_id']:
+                                text_color "FFD000"
+                            else:
+                                text_color "FFFFFF"
+                                text_hover_color "FFD000"
+                            background "gui/inventory/quest_line.png"
+                            xpos 595
+                            ypos 335
+                            text_size 28
+                            bottom_padding 10
+                            action [Show("new_quest_screen", None, selected = i['quest_id'])]
             vbox:
                 $ desc_text = ''
-                if selected != None and selected[0] == 'm':
-                    for i in active_quest['main']:
-                        if i['quest_id'] == selected:
-                            $ desc_text = i['desc']
-
-                elif selected != None and selected[0] == 's':
-                    for i in active_quest['side']:
-                        if i['quest_id'] == selected:
-                            $ desc_text = i['desc']
-
+                if selected != None:
+                    $ selected_quest = get_quest_by_id(selected)
+                    $ desc_text = selected_quest['desc']
+                    
                 $ need_scroll = len(desc_text) >= 350
                 viewport:
                     xpos 1010
@@ -350,7 +297,7 @@ screen new_quest_screen(selected = None):
                         scrollbars "vertical" 
                     text desc_text:
                         size 22
-                        xsize 315
+                        xsize 305
                         color 'FFFFFF'
 
     key "K_ESCAPE" action [SetScreenVariable('is_quest_open', False), Hide("new_quest_screen"), Show('show_quest_button'), Show("show_inventory_button")]
@@ -360,8 +307,12 @@ transform quest_open:
     zoom 0
     yoffset 100
     xalign 0.85
-    # ypos 70
     ease 0.4 zoom 1.0 yoffset 0
+
+transform null_transform:
+    zoom 1.0
+
+transform quest_close:
     on hide:
         ease 0.4 zoom 0 yoffset 100
 

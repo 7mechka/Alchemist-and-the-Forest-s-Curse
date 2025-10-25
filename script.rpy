@@ -477,6 +477,7 @@ label intro:
     with Dissolve(.3)
     pause
     hide bs
+    $ start_quest('m0')
     return
 # В магазине
 label open_shop:
